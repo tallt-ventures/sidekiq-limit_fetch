@@ -46,10 +46,10 @@ module Sidekiq::LimitFetch::Global
 
     def update_heartbeat(ttl)
       Sidekiq.redis do |it|
-        it.multi do
-          it.set heartbeat_key, true
-          it.sadd PROCESS_SET, Selector.uuid
-          it.expire heartbeat_key, ttl
+        it.multi do |multi|
+          multi.set heartbeat_key, true
+          multi.sadd PROCESS_SET, Selector.uuid
+          multi.expire heartbeat_key, ttl
         end
       end
     end
